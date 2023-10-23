@@ -1,11 +1,17 @@
 import { getColor } from 'consola/utils'
-import type { Payload, TreeItem, TreeLogOptions } from './types'
+import type { CreateTreeOptions, Payload, TreeItem, TreeLogOptions } from './types'
 import { PAYLOAD_FILE } from './payloads'
 
-export function createTree(payloads: Payload[], cwd: string): TreeItem[] {
+export function createTree(payloads: Payload[], options: CreateTreeOptions): TreeItem[] {
   const tree: TreeItem[] = []
   for (const payload of payloads) {
-    const path = payload.path.replace(cwd, '').split('/').filter(Boolean)
+    if (options.payloadSizeLevel === 'warning' && payload.size < options.warningSize)
+      continue
+
+    if (options.payloadSizeLevel === 'error' && payload.size < options.errorSize)
+      continue
+
+    const path = payload.path.replace(options.cwd, '').split('/').filter(Boolean)
     let current = tree
     for (const name of path) {
       let child = current.find(item => item.name === name)

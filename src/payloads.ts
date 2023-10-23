@@ -3,6 +3,7 @@ import { resolve } from 'pathe'
 import type { Payload } from './types'
 
 export const PAYLOAD_FILE = '_payload.json'
+export const payloadSizeLevels = ['warning', 'error', 'all'] as const
 
 export function discoverPayloadsPaths(source: string): string[] {
   const payloads: string[] = []
