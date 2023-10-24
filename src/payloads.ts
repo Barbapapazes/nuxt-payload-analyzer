@@ -1,33 +1,20 @@
 import fs from 'node:fs'
-import { resolve } from 'pathe'
 import type { Payload } from './types'
 
 export const PAYLOAD_FILE = '_payload.json'
 export const payloadSizeLevels = ['warning', 'error', 'all'] as const
 
-export function discoverPayloadsPaths(source: string): string[] {
-  const payloads: string[] = []
+export function mustThrowError(payloads: Payload[], errorSize: number) {
+  let mustThrow = false
 
-  const files = fs.readdirSync(source)
-
-  files.forEach((file) => {
-    const filePath = resolve(source, file)
-    const fileStat = fs.lstatSync(filePath)
-
-    const isFile = fileStat.isFile()
-    if (isFile && file === PAYLOAD_FILE) {
-      payloads.push(filePath)
-      return
+  for (const payload of payloads) {
+    if (payload.size >= errorSize) {
+      mustThrow = true
+      break
     }
+  }
 
-    const isDirectory = fileStat.isDirectory()
-    if (isDirectory) {
-      const nestedPayloads = discoverPayloadsPaths(filePath)
-      payloads.push(...nestedPayloads)
-    }
-  })
-
-  return payloads
+  return mustThrow
 }
 
 export function getPayloads(payloadsPaths: string[]): Payload[] {

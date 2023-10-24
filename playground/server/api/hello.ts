@@ -1,3 +1,7 @@
+import { defineEventHandler } from 'h3'
+
 export default defineEventHandler(() => {
-  return 'Hello World!'
+  return {
+    data: 'Hello World!'.repeat(10_000),
+  }
 })

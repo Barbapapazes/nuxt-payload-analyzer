@@ -27,7 +27,7 @@ export function createTree(payloads: Payload[], options: CreateTreeOptions): Tre
 }
 
 export function buildTreeLog(tree: TreeItem[], options: TreeLogOptions): string {
-  let log: string = ''
+  const log: string[] = []
 
   const total = tree.length - 1
   for (let i = 0; i <= total; i++) {
@@ -35,18 +35,19 @@ export function buildTreeLog(tree: TreeItem[], options: TreeLogOptions): string 
     const isLast = i === total
     const currentPrefix = isLast ? `${options.prefix}└─ ` : `${options.prefix}├─ `
 
-    log += buildTreeItemLog(currentPrefix, item.name, item.size, { warningSize: options.warningSize, errorSize: options.errorSize })
+    const gray = getColor('gray')
+    log.push(gray(buildTreeItemLog(currentPrefix, item.name, item.size, { warningSize: options.warningSize, errorSize: options.errorSize })))
 
     if (item.children.length) {
       const nestedPrefix = `${options.prefix}${isLast ? '  ' : '│  '}`
-      log += buildTreeLog(item.children, {
+      log.push(buildTreeLog(item.children, {
         ...options,
         prefix: nestedPrefix,
-      })
+      }))
     }
   }
 
-  return log
+  return log.flat().join('\n')
 }
 
 export function buildTreeItemLog(prefix: string, text: string, size: number, options: { warningSize: number; errorSize: number }): string {
@@ -56,15 +57,15 @@ export function buildTreeItemLog(prefix: string, text: string, size: number, opt
 
   const isPayload = text === PAYLOAD_FILE
   if (isPayload && size >= options.errorSize)
-    return `${prefix}${errorColor(text)} (${toHumanSize(size)}) [TOO BIG]\n`
+    return `${prefix}${errorColor(text)} (${toHumanSize(size)}) [TOO BIG]`
 
   if (isPayload && size >= options.warningSize)
-    return `${prefix}${warningColor(text)} (${toHumanSize(size)}) [BIG]\n`
+    return `${prefix}${warningColor(text)} (${toHumanSize(size)}) [BIG]`
 
   if (text === PAYLOAD_FILE)
-    return `${prefix}${payloadColor(text)} (${toHumanSize(size)})\n`
+    return `${prefix}${payloadColor(text)} (${toHumanSize(size)})`
 
-  return `${prefix}${text}\n`
+  return `${prefix}${text}`
 }
 
 export function toHumanSize(bytes: number): string {
