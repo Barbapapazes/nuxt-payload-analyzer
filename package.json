@@ -43,6 +43,8 @@
     "build": "pnpm build:module && pnpm build:cli",
     "build:module": "nuxt-module-build build",
     "build:cli": "unbuild",
+    "build:stub": "pnpm build:stub:module && pnpm build:stub:cli",
+    "build:stub:module": "nuxt-module-build build --stub",
     "build:stub:cli": "unbuild --stub",
     "release": "bumpp",
     "lint": "eslint .",
