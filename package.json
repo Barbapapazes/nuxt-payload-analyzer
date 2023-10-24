@@ -7,6 +7,10 @@
   "author": "Estéban Soubiran <e.soubiran25@gmail.com> (https://github.com/barbapapazes/)",
   "license": "MIT",
   "homepage": "https://github.com/barbapapazes/nuxt-payload-analyzer",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/barbapapazes/nuxt-payload-analyzer.git"
+  },
   "keywords": [
     "nuxt",
     "cli",
@@ -15,18 +19,13 @@
   ],
   "exports": {
     ".": {
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      },
-      "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
-      }
+      "types": "./dist/types.d.ts",
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
     }
   },
-  "main": "./dist/index.cjs",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/module.cjs",
+  "types": "./dist/types.d.ts",
   "bin": {
     "nuxt-payload-analyzer": "./bin/nuxt-payload-analyzer.mjs"
   },
@@ -35,22 +34,31 @@
     "dist"
   ],
   "scripts": {
+    "postinstall": "pnpm run dev:prepare",
+    "dev": "nuxt dev playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
+    "dev:build": "nuxt build playground",
     "dev:generate": "nuxt generate playground",
     "nuxt-payload-analyzer": "node bin/nuxt-payload-analyzer.mjs --cwd playground",
-    "build": "unbuild",
-    "build:stub": "unbuild --stub",
+    "build": "pnpm build:module && pnpm build:cli",
+    "build:module": "nuxt-module-build build",
+    "build:cli": "unbuild",
+    "build:stub:cli": "unbuild --stub",
     "release": "bumpp",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
+    "@nuxt/kit": "^3.8.0",
     "citty": "^0.1.4",
     "consola": "^3.2.3",
     "pathe": "^1.1.1"
   },
   "devDependencies": {
     "@antfu/eslint-config": "1.0.0-beta.22",
+    "@nuxt/module-builder": "^0.5.2",
+    "@nuxt/schema": "^3.8.0",
     "@types/node": "^20.8.7",
     "bumpp": "^9.2.0",
     "eslint": "^8.51.0",

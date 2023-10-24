@@ -1,10 +1,12 @@
+import process from 'node:process'
 import { defineCommand, runMain } from 'citty'
 import { resolve } from 'pathe'
 import { consola } from 'consola'
-import nuxtPayloadAnalyzer from '../package.json' assert { type: 'json' }
-import { discoverPayloadsPaths, getPayloads, payloadSizeLevels } from './payloads'
-import { buildTreeLog, createTree } from './log'
-import type { PayloadSizeLevel } from './types'
+import nuxtPayloadAnalyzer from '../../package.json' assert { type: 'json' }
+import { buildTreeLog, createTree } from '../log'
+import type { PayloadSizeLevel } from '../types'
+import { getPayloads, mustThrowError, payloadSizeLevels } from '../payloads'
+import { discoverPayloadsPaths } from './payloads'
 
 const main = defineCommand({
   meta: {
@@ -22,6 +24,23 @@ const main = defineCommand({
       type: 'string',
       description: 'Payload size level to display',
       default: 'all',
+    },
+    // TODO: use a number once available
+    warningSize: {
+      type: 'string',
+      description: 'Warning size in bytes',
+      default: (1024 * 50).toString(),
+    },
+    // TODO: use a number once available
+    errorSize: {
+      type: 'string',
+      description: 'Error size in bytes',
+      default: (1024 * 100).toString(),
+    },
+    failOnError: {
+      type: 'boolean',
+      description: 'Fail on error',
+      default: false,
     },
   },
   async run({ args }) {
@@ -42,16 +61,21 @@ const main = defineCommand({
     const tree = createTree(payloads, {
       cwd,
       payloadSizeLevel: payloadSizeLevel as PayloadSizeLevel,
-      warningSize: 1024 * 50, // 50KB
-      errorSize: 1024 * 100, // 100KB
+      warningSize: Number(args.warningSize),
+      errorSize: Number(args.errorSize),
     })
     const logs = buildTreeLog(tree, {
       prefix: '',
-      warningSize: 1024 * 50, // 50KB
-      errorSize: 1024 * 100, // 100KB
+      warningSize: Number(args.warningSize),
+      errorSize: Number(args.errorSize),
     })
 
     consola.log(logs)
+
+    if (args.failOnError && mustThrowError(payloads, Number(args.errorSize))) {
+      consola.error('Payloads are too big. Please reduce the size of your payloads.')
+      process.exit(1)
+    }
   },
 })
 
