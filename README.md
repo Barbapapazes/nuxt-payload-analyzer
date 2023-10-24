@@ -7,7 +7,7 @@
 
 A Nuxt module used to analyze [payload](https://nuxt.com/docs/api/nuxt-config#payloadextraction) size in your Nuxt application.
 
-When you generate a Nuxt application, payloads from `useFetch` and `useAsyncData` are extracted into JSON files that are fetch at runtime. If you forget to filter the output of these functions, you could generate an enormous payload that will slow down your application. For example, if you use [Nuxt Content](https://content.nuxt.com) to generate a list of articles, you could forget to remove the body of the articles, which is not used, from the output. You can easily get a payload of more than 150kB.
+When you generate a Nuxt application, payloads from `useFetch` and `useAsyncData` are extracted into JSON files that are fetched at runtime. If you forget to filter the output of these functions, you could generate an enormous payload that will slow down your application. For example, if you use [Nuxt Content](https://content.nuxt.com) to generate a list of articles, you could forget to remove the body of the articles, which is not used, from the output. You can easily get a payload of more than 150kB.
 
 This module will help you to detect these mistakes.
 
