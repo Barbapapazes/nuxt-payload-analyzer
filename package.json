@@ -34,7 +34,6 @@
     "dist"
   ],
   "scripts": {
-    "postinstall": "pnpm run dev:prepare",
     "dev": "nuxt dev playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
     "dev:build": "nuxt build playground",

@@ -90,6 +90,12 @@ Install dependencies
 pnpm install
 ```
 
+Prepare the repo
+
+```bash
+pnpm run dev:prepare
+```
+
 Build Stub
 
 ```bash
