@@ -30,7 +30,7 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.hooks.hook('nitro:init', async (nitro) => {
       const cwd = nitro.options.output.publicDir
       nitro.hooks.hook('prerender:generate', async (ctx) => {
-        if (ctx.fileName?.endsWith('_payload.json')) {
+        if (ctx.fileName?.endsWith('_payload.json') && !ctx.fileName.includes('?')) {
           const relativeFileName = `.${ctx.fileName}`
           payloadsPaths.push(resolve(cwd, relativeFileName))
         }
