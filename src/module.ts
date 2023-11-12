@@ -37,6 +37,11 @@ export default defineNuxtModule<ModuleOptions>({
       })
 
       nitro.hooks.hook('close', () => {
+        if (payloadsPaths.length === 0) {
+          nitro.logger.info('No payloads found')
+          return
+        }
+
         nitro.logger.info('Nuxt Payload Analyzer')
 
         const payloads = getPayloads(payloadsPaths)
