@@ -57,12 +57,12 @@
     "pathe": "^1.1.1"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "1.0.0-beta.22",
+    "@antfu/eslint-config": "1.2.1",
     "@nuxt/module-builder": "^0.5.2",
     "@nuxt/schema": "^3.8.0",
     "@types/node": "^20.8.7",
     "bumpp": "^9.2.0",
-    "eslint": "^8.51.0",
+    "eslint": "^8.55.0",
     "jiti": "^1.20.0",
     "nuxt": "^3.8.0",
     "typescript": "^5.2.2",
