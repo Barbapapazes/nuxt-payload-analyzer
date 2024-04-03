@@ -50,7 +50,7 @@ export function buildTreeLog(tree: TreeItem[], options: TreeLogOptions): string 
   return log.flat().join('\n')
 }
 
-export function buildTreeItemLog(prefix: string, text: string, size: number, options: { warningSize: number; errorSize: number }): string {
+export function buildTreeItemLog(prefix: string, text: string, size: number, options: { warningSize: number, errorSize: number }): string {
   const payloadColor = getColor('blue')
   const warningColor = getColor('yellow')
   const errorColor = getColor('red')
