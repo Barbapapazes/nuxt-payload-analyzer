@@ -30,7 +30,7 @@ You can use this module in two ways:
 Install the module
 
 ```bash
-npm install nuxt-payload-analyzer
+npx nuxi@latest module add nuxt-payload-analyzer
 ```
 
 Add the module to your `nuxt.config.ts`
