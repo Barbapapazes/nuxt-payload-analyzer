@@ -4,59 +4,51 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-importers:
+dependencies:
+  '@nuxt/kit':
+    specifier: ^3.8.0
+    version: 3.8.0(rollup@3.29.4)
+  citty:
+    specifier: ^0.1.4
+    version: 0.1.4
+  consola:
+    specifier: ^3.2.3
+    version: 3.2.3
+  pathe:
+    specifier: ^1.1.1
+    version: 1.1.1
 
-  .:
-    dependencies:
-      '@nuxt/kit':
-        specifier: ^3.8.0
-        version: 3.8.0(rollup@3.29.4)
-      citty:
-        specifier: ^0.1.4
-        version: 0.1.4
-      consola:
-        specifier: ^3.2.3
-        version: 3.2.3
-      pathe:
-        specifier: ^1.1.1
-        version: 1.1.1
-    devDependencies:
-      '@antfu/eslint-config':
-        specifier: 1.0.0-beta.22
-        version: 1.0.0-beta.22(eslint@8.51.0)(typescript@5.2.2)(vitest@0.34.6)
-      '@nuxt/module-builder':
-        specifier: ^0.5.2
-        version: 0.5.2(@nuxt/kit@3.8.0)(nuxi@3.9.1)(typescript@5.2.2)
-      '@nuxt/schema':
-        specifier: ^3.8.0
-        version: 3.8.0(rollup@3.29.4)
-      '@types/node':
-        specifier: ^20.8.7
-        version: 20.8.7
-      bumpp:
-        specifier: ^9.2.0
-        version: 9.2.0
-      eslint:
-        specifier: ^8.51.0
-        version: 8.51.0
-      jiti:
-        specifier: ^1.20.0
-        version: 1.20.0
-      nuxt:
-        specifier: ^3.8.0
-        version: 3.8.0(@types/node@20.8.7)(eslint@8.51.0)(rollup@3.29.4)(typescript@5.2.2)(vite@4.5.0)
-      typescript:
-        specifier: ^5.2.2
-        version: 5.2.2
-      unbuild:
-        specifier: ^2.0.0
-        version: 2.0.0(typescript@5.2.2)
-
-  playground:
-    devDependencies:
-      nuxt-payload-analyzer:
-        specifier: ^0.0.1
-        version: 0.0.1
+devDependencies:
+  '@antfu/eslint-config':
+    specifier: 1.0.0-beta.22
+    version: 1.0.0-beta.22(eslint@8.51.0)(typescript@5.2.2)(vitest@0.34.6)
+  '@nuxt/module-builder':
+    specifier: ^0.5.2
+    version: 0.5.2(@nuxt/kit@3.8.0)(nuxi@3.9.1)(typescript@5.2.2)
+  '@nuxt/schema':
+    specifier: ^3.8.0
+    version: 3.8.0(rollup@3.29.4)
+  '@types/node':
+    specifier: ^20.8.7
+    version: 20.8.7
+  bumpp:
+    specifier: ^9.2.0
+    version: 9.2.0
+  eslint:
+    specifier: ^8.51.0
+    version: 8.51.0
+  jiti:
+    specifier: ^1.20.0
+    version: 1.20.0
+  nuxt:
+    specifier: ^3.8.0
+    version: 3.8.0(@types/node@20.8.7)(eslint@8.51.0)(rollup@3.29.4)(typescript@5.2.2)(vite@4.5.0)
+  typescript:
+    specifier: ^5.2.2
+    version: 5.2.2
+  unbuild:
+    specifier: ^2.0.0
+    version: 2.0.0(typescript@5.2.2)
 
 packages:
 
@@ -5370,15 +5362,6 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
-
-  /nuxt-payload-analyzer@0.0.1:
-    resolution: {integrity: sha512-pL8gfOzW7qq5lWfLs14bnJFomx6/Wi8YV2+Ny37Iy/aeJTBpjR7ZahrHecUTVZFgATkisQiXZ190tlnJpKrnEw==}
-    hasBin: true
-    dependencies:
-      citty: 0.1.4
-      consola: 3.2.3
-      pathe: 1.1.1
     dev: true
 
   /nuxt@3.8.0(@types/node@20.8.7)(eslint@8.51.0)(rollup@3.29.4)(typescript@5.2.2)(vite@4.5.0):
