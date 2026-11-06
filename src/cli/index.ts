@@ -3,7 +3,8 @@ import { defineCommand, runMain } from 'citty'
 import { resolve } from 'pathe'
 import { consola } from 'consola'
 import nuxtPayloadAnalyzer from '../../package.json' assert { type: 'json' }
-import { buildTreeLog, createTree } from '../log'
+import { buildInlinePayloadLog, buildTreeLog, createTree } from '../log'
+import { fetchInlinePayload } from '../inline'
 import type { PayloadSizeLevel } from '../types'
 import { getPayloads, mustThrowError, payloadSizeLevels } from '../payloads'
 import { discoverPayloadsPaths } from './payloads'
@@ -18,6 +19,16 @@ const main = defineCommand({
     cwd: {
       type: 'string',
       description: 'Current working directory',
+    },
+    url: {
+      type: 'string',
+      description: 'Analyze the inline payload (__NUXT_DATA__) of a server-rendered page instead of generated _payload.json files. Comma-separated for several pages.',
+    },
+    // TODO: use a number once available
+    top: {
+      type: 'string',
+      description: 'With --url, how many payload keys to show per page',
+      default: '10',
     },
     // TODO: use an enum once available
     payloadSizeLevel: {
@@ -48,6 +59,24 @@ const main = defineCommand({
 
     if (!payloadSizeLevels.includes(payloadSizeLevel as PayloadSizeLevel))
       throw new Error(`Invalid payload size level: ${payloadSizeLevel}, must be one of ${payloadSizeLevels.join(', ')}`)
+
+    if (args.url) {
+      const urls = args.url.split(',').map(url => url.trim()).filter(Boolean)
+      const sizes = { warningSize: Number(args.warningSize), errorSize: Number(args.errorSize) }
+      let tooBig = false
+
+      for (const url of urls) {
+        const payload = await fetchInlinePayload(url)
+        consola.log(buildInlinePayloadLog(url, payload, { ...sizes, top: Number(args.top) }))
+        tooBig ||= payload.size >= sizes.errorSize
+      }
+
+      if (args.failOnError && tooBig) {
+        consola.error('Payloads are too big. Please reduce the size of your payloads.')
+        process.exit(1)
+      }
+      return
+    }
 
     const cwd = resolve(args.cwd || '.')
 

@@ -1,5 +1,5 @@
 import { getColor } from 'consola/utils'
-import type { CreateTreeOptions, Payload, TreeItem, TreeLogOptions } from './types'
+import type { CreateTreeOptions, InlinePayload, Payload, TreeItem, TreeLogOptions } from './types'
 import { PAYLOAD_FILE } from './payloads'
 
 export function createTree(payloads: Payload[], options: CreateTreeOptions): TreeItem[] {
@@ -76,4 +76,29 @@ export function toHumanSize(bytes: number): string {
   if (i === 0)
     return `${bytes} ${sizes[i]}`
   return `${(bytes / 1024 ** i).toFixed(1)} ${sizes[i]}`
+}
+
+export function buildInlinePayloadLog(url: string, payload: InlinePayload, options: { warningSize: number; errorSize: number; top: number }): string {
+  const gray = getColor('gray')
+  const keys = payload.keys.slice(0, options.top)
+  const width = Math.max(...keys.map(key => key.name.length), 0)
+
+  // Same colors and labels as `_payload.json` files in buildTreeItemLog.
+  const name = `${url} __NUXT_DATA__`
+  const size = `(${toHumanSize(payload.size)})`
+  const header = payload.size >= options.errorSize
+    ? `${getColor('red')(name)} ${size} [TOO BIG]`
+    : payload.size >= options.warningSize
+      ? `${getColor('yellow')(name)} ${size} [BIG]`
+      : `${getColor('blue')(name)} ${size}`
+
+  const log = [header]
+  keys.forEach((key, i) => {
+    const isLast = i === keys.length - 1 && payload.keys.length <= options.top
+    log.push(gray(`${isLast ? '└─' : '├─'} ${key.name.padEnd(width)}  ${toHumanSize(key.size)}`))
+  })
+  if (payload.keys.length > options.top)
+    log.push(gray(`└─ … ${payload.keys.length - options.top} more`))
+
+  return log.join('\n')
 }
