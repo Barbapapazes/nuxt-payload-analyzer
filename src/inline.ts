@@ -21,6 +21,17 @@ const LITERAL_TYPES = new Set(['Date', 'RegExp', 'BigInt', 'URL', 'URLSearchPara
 /** Nuxt reducers that wrap exactly one value: ["Reactive", index]. */
 const WRAPPERS = new Set(['Reactive', 'ShallowReactive', 'Ref', 'ShallowRef', 'EmptyRef', 'EmptyShallowRef', 'null'])
 
+/**
+ * Size of one entry as devalue wrote it. `JSON.parse` decodes the escapes
+ * devalue adds for embedding in a `<script>` (`<` as `\u003C`, U+2028,
+ * U+2029) and `JSON.stringify` doesn't put them back, so re-add them:
+ * otherwise every `<` in HTML content would lose 5 bytes.
+ */
+function serializedSize(entry: unknown): number {
+  const json = JSON.stringify(entry ?? null).replace(/[<\u2028\u2029]/g, char => `\\u${char.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0')}`)
+  return Buffer.byteLength(json)
+}
+
 function isIndex(value: unknown): value is number {
   return Number.isInteger(value) && (value as number) >= 0
 }
@@ -77,8 +88,10 @@ function reachableSize(payload: unknown[], start: number): number {
       continue
     seen.add(index)
     // +1 for the comma that separates entries in the serialized array.
-    size += Buffer.byteLength(JSON.stringify(payload[index] ?? null)) + 1
-    stack.push(...references(payload[index]))
+    size += serializedSize(payload[index]) + 1
+    // No spread: a large array would exceed V8's argument limit.
+    for (const reference of references(payload[index]))
+      stack.push(reference)
   }
   return size
 }
