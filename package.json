@@ -48,7 +48,8 @@
     "release": "bumpp",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "test": "vitest run"
   },
   "dependencies": {
     "@nuxt/kit": "^3.8.0",
@@ -62,10 +63,12 @@
     "@nuxt/schema": "^3.8.0",
     "@types/node": "^20.8.7",
     "bumpp": "^9.2.0",
+    "devalue": "^5.0.0",
     "eslint": "^8.51.0",
     "jiti": "^1.20.0",
     "nuxt": "^3.8.0",
     "typescript": "^5.2.2",
-    "unbuild": "^2.0.0"
+    "unbuild": "^2.0.0",
+    "vitest": "^3.2.0"
   }
 }

@@ -69,6 +69,28 @@ You can specify the directory of your Nuxt application with the `--cwd` option.
 npx nuxt-payload-analyzer@latest --cwd ./my-nuxt-app
 ```
 
+### Server-rendered pages
+
+With SSR, payloads are not extracted to `_payload.json`: they are inlined in the HTML of every page as `<script id="__NUXT_DATA__">`. Use `--url` to analyze a deployed page and see which `data`, `state` and `pinia` keys take the space.
+
+```bash
+npx nuxt-payload-analyzer@latest --url https://nuxt.com
+```
+
+```bash
+https://nuxt.com __NUXT_DATA__ (196.6 KB) [TOO BIG]
+├─ data: navigation:4.x     77.7 KB
+├─ data: index              49.6 KB
+├─ data: official-modules   40.4 KB
+├─ data: showcase           13.2 KB
+└─ … 17 more
+```
+
+Pass several pages separated by commas, and `--top` to show more keys. `--warningSize`, `--errorSize` and `--failOnError` apply to the whole payload of each page, so you can run it in CI against a preview deployment.
+
+> [!NOTE]
+> A value shared by several keys is stored once by devalue but counted for each key, so the keys can add up to more than the payload.
+
 ### Options
 
 The following options are similar for the Nuxt module and the CLI. For the module, you must use the `payloadAnalyzer` key in your `nuxt.config.ts`.
